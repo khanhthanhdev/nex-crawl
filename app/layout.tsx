@@ -4,6 +4,14 @@ import "./globals.css";
 import App from "next/app";
 import { AppProviders } from "@/components/providers/AppProviders";
 
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,13 +25,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        
-        <AppProviders>
-        {children}
-        </AppProviders>
-      </body>
-    </html>
+    <ClerkProvider afterSignOutUrl={"/sign-in"}
+      appearance={
+        {
+          elements: {
+            formButtonPrimary: "bg-primary hover:bg-primary/90 text-sm !shadow-none",
+          }
+        }
+      }
+    >
+
+      <html lang="en">
+        <body className={inter.className}>
+          
+          <AppProviders>
+          {children}
+          </AppProviders>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

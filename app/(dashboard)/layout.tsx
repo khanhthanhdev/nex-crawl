@@ -4,6 +4,7 @@ import DesktopSidebar from '@/components/Sidebar'
 import {ModeToggle} from '@/components/ModeToggle'
 import { Separator } from '@/components/ui/separator'
 import React from 'react'
+import { SignedIn, UserButton } from '@clerk/nextjs'
 
 function layout({children}: {children: React.ReactNode}) {
   return <div className='flex h-screen'>
@@ -13,6 +14,9 @@ function layout({children}: {children: React.ReactNode}) {
                 <BreadcrumbHeader />
                 <div className='gap-1 flex items-center'>
                     <ModeToggle />
+                    <SignedIn>
+                        <UserButton />
+                    </SignedIn>
                 </div>
             </header>
             <Separator />
