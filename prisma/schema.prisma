@@ -23,5 +23,5 @@ model Workflow {
   updatedAt DateTime @updatedAt
 
   // can not have 2 wf
-
+  @@unique([userId, name])
 }
