@@ -43,7 +43,10 @@ function CreateWorkflowDialog({ triggerText }: { triggerText?: string }) {
         mutate(values);
     },[mutate])
 
-    return <Dialog open={open} onOpenChange={setOpen}>
+    return <Dialog open={open} onOpenChange={(open) => {
+        form.reset();
+        setOpen(open);
+    }}>
 
         <DialogTrigger asChild>
             <Button>
