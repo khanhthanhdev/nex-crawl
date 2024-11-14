@@ -5,6 +5,7 @@ import { waitFor } from '@/lib/helper/waitFor'
 import { AlertCircle, InboxIcon } from 'lucide-react'
 import React, { Suspense } from 'react'
 import CreateWorkflowDialog from './_components/CreateWorkflowDialog'
+import WorkflowCard from './_components/WorkflowCard'
 
 function page() {
   return <div className='flex-1 flex flex-col h-full'>
@@ -73,9 +74,11 @@ async function UserWorkflows() {
         </div>
     }
 
-    return <pre >
-            {JSON.stringify(workflows, null, 4)}
-    </pre>
+    return <div className='grid grid-cols-1 gap-4'>
+        {workflows.map((workflow, index) => (
+            <WorkflowCard key={workflow.id} workflow={workflow} />
+        ))}
+    </div>
 }
 
 export default page
