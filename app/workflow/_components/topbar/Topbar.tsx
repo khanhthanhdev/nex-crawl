@@ -10,9 +10,10 @@ import SaveBtn from "./SaveBtn";
 interface Props {
     title: string;
     subtitle?: string;
+    workflowId: string;
 }
 
-export default function Topbar({title, subtitle}: Props) {
+export default function Topbar({title, subtitle, workflowId}: Props) {
 
     const router = useRouter();
 
@@ -37,7 +38,7 @@ export default function Topbar({title, subtitle}: Props) {
             </div>
         </div>
         <div className="flex gap-1 flex-1 justify-end">
-                <SaveBtn />
+                <SaveBtn workflowId={workflowId} />
         </div>
     </header>
 }
