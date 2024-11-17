@@ -49,7 +49,7 @@ function FlowEditor({workflow}: {workflow: Workflow}) {
             snapToGrid
             snapGrid={snapGrid}
             fitViewOptions={fitViewOptions}
-
+        // add fitView if want to reset to the fit screen when f5
         >
             <Controls position='top-left' fitViewOptions={fitViewOptions} />
             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
