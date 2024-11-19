@@ -8,11 +8,15 @@ import "@xyflow/react/dist/style.css"
 import { CreateFlowNode } from '@/lib/workflow/createFlowNode'
 import { TaskType } from '@/types/task'
 import NodeComponent from './nodes/NodeComponent'
-import { set } from 'date-fns'
 import { AppNode } from '@/types/appNode'
+import DeletableEdge from './edges/DeletableEdge'
 
 const nodeTypes = {
     NexCrawlNode: NodeComponent,
+}
+
+const edgeTypes = {
+    default: DeletableEdge
 }
 
 const snapGrid: [number, number] = [50, 50]
@@ -68,6 +72,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
             onNodesChange={onNotesChange}
             onEdgesChange={onEdgesChange}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
             snapToGrid
             snapGrid={snapGrid}
             fitViewOptions={fitViewOptions}
