@@ -18,11 +18,11 @@ const nodeTypes = {
 const snapGrid: [number, number] = [50, 50]
 const fitViewOptions = { padding: 1 }
 
-function FlowEditor({workflow}: {workflow: Workflow}) {
+function FlowEditor({ workflow }: { workflow: Workflow }) {
 
     const [nodes, setNodes, onNotesChange] = useNodesState<AppNode>([])
     const [edges, setEdges, onEdgesChange] = useEdgesState([])
-    const {setViewport} = useReactFlow();
+    const { setViewport, screenToFlowPosition } = useReactFlow();
 
     useEffect(() => {
         try {
@@ -30,17 +30,17 @@ function FlowEditor({workflow}: {workflow: Workflow}) {
             if (!flow) {
                 return;
             }
-            setNodes(flow.nodes || []) 
+            setNodes(flow.nodes || [])
             setEdges(flow.edges || [])
             if (!flow.viewport) return;
-            const {x=0,y=0, zoom=1} = flow.viewport;
-            setViewport({x,y,zoom})
+            const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+            setViewport({ x, y, zoom })
         } catch (error) {
-            
+
         }
     }, [workflow.definitions, setEdges, setNodes, setViewport])
 
-    const onDragOver = useCallback((event : React.DragEvent) => {
+    const onDragOver = useCallback((event: React.DragEvent) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     }, [])
@@ -51,11 +51,13 @@ function FlowEditor({workflow}: {workflow: Workflow}) {
         if (typeof taskType === undefined || !taskType) {
             return;
         }
-        const newNode = CreateFlowNode(taskType as TaskType);
+
+        const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
+        const newNode = CreateFlowNode(taskType as TaskType, position);
         setNodes((nds) => nds.concat(newNode))
     }, [])
 
-  return <main className='h-full w-full'>
+    return <main className='h-full w-full'>
         <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -65,14 +67,14 @@ function FlowEditor({workflow}: {workflow: Workflow}) {
             snapToGrid
             snapGrid={snapGrid}
             fitViewOptions={fitViewOptions}
-        // add fitView if want to reset to the fit screen when f5
+            // add fitView if want to reset to the fit screen when f5
             onDragOver={onDragOver}
             onDrop={onDrop}
         >
             <Controls position='top-left' fitViewOptions={fitViewOptions} />
             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         </ReactFlow>
-  </main>
+    </main>
 }
 
 export default FlowEditor
