@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ParamProps } from '@/types/appNode';
 import { TaskParam } from '@/types/task';
-import React, { useId } from 'react'
+import React, { useEffect, useId } from 'react'
 
 
 
@@ -14,6 +14,11 @@ function StringParam({
 
     const [internalValue, setInternalValue] = React.useState(value);
     const id = useId();
+    useEffect(() => {
+        setInternalValue(value);
+    },[value])
+
+    
 
   return <div className='space-y-1 p-1 w-full'>
         <Label htmlFor={id} className='text-xs flex'>
