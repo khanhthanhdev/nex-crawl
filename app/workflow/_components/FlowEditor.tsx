@@ -59,7 +59,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
         const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
         const newNode = CreateFlowNode(taskType as TaskType, position);
         setNodes((nds) => nds.concat(newNode))
-    }, [])
+    }, [screenToFlowPosition, setNodes])
 
     const onConnect = useCallback((connection: Connection) => {
         setEdges((eds) => addEdge({...connection, animated: true}, eds));
@@ -68,11 +68,14 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
         const node = nodes.find((nd) => nd.id === connection.target);
         if(!node) return;
         const nodeInputs = node.data.inputs;
-        delete nodeInputs[connection.targetHandle];
+        
         updateNodeData(node.id, {
-            inputs: nodeInputs
+            inputs: {
+                ...nodeInputs,
+                [connection.targetHandle]: ""
+            }
         })
-    }, [setEdges, updateNodeData])
+    }, [setEdges, updateNodeData, nodes])
 
     return <main className='h-full w-full'>
         <ReactFlow

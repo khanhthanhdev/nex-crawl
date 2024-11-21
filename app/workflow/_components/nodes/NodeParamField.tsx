@@ -9,10 +9,11 @@ import { AppNode } from '@/types/appNode'
 import BrowserInstanceParam from './param/BrowserInstanceParam'
 
 function NodeParamField({
-    param, nodeId
+    param, nodeId, disabled
 }: {
     param: TaskParam;
     nodeId: string;
+    disabled: boolean;
 }) {
 
     const { updateNodeData, getNode } = useReactFlow();
@@ -33,6 +34,7 @@ function NodeParamField({
         case TaskParamType.STRING:
             return <StringParam param={param} value={value} 
                 updateNodeParamValue={updateNodeParamValue}
+                disabled={disabled}
             />
         case TaskParamType.BROWSER_INSTANCE:
             return (

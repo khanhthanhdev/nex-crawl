@@ -10,8 +10,8 @@ export const ExtractTextFromElement = {
         {
             name: "HTML",
             type: TaskParamType.STRING,
-
-        required: true,
+            required: true,
+            variant: "textarea",
 
         },
         {
