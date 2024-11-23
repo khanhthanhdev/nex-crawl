@@ -10,6 +10,8 @@ import { TaskType } from '@/types/task'
 import NodeComponent from './nodes/NodeComponent'
 import { AppNode } from '@/types/appNode'
 import DeletableEdge from './edges/DeletableEdge'
+import { isValid } from 'date-fns'
+import { TaskRegistry } from '@/lib/workflow/task/registry'
 
 const nodeTypes = {
     NexCrawlNode: NodeComponent,
@@ -77,6 +79,32 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
         })
     }, [setEdges, updateNodeData, nodes])
 
+    const isValidConnection = useCallback((connection: Edge | Connection) => {
+        if (connection.source === connection.target) return false;
+
+        const source = nodes.find((nd) => nd.id === connection.source);
+        const target = nodes.find((nd) => nd.id === connection.target);
+
+        if(!source || !target) {
+            console.log('source or target not found')
+            return false;
+        }
+
+        const sourceTask = TaskRegistry[source.data.type];
+        const targetTask = TaskRegistry[target.data.type];
+
+        const output = sourceTask.outputs.find((output) => output.name === connection.sourceHandle);
+
+        const input = targetTask.inputs.find((input) => input.name === connection.targetHandle);
+
+        if (input?.type !== output?.type) {
+            console.error('input type and output type not match')
+            return false;
+        }
+        console.log('output', {output, input})
+        return true;
+    }, [nodes]);
+
     return <main className='h-full w-full'>
         <ReactFlow
             nodes={nodes}
@@ -92,6 +120,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
             onDragOver={onDragOver}
             onDrop={onDrop}
             onConnect={onConnect}
+            isValidConnection={isValidConnection}
         >
             <Controls position='top-left' fitViewOptions={fitViewOptions} />
             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
