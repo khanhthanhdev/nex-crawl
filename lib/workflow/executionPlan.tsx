@@ -41,8 +41,46 @@ export function FlowExecutionPlan(nodes: AppNode[], edges: Edge[]): FlowExecutio
                     continue;
                 }
             }
+
+            nextPhase.nodes.push(currentNode);
+            planned.add(currentNode.id);
         }
     }
 
     return { executionPlan }
+}
+
+function getInvalidInputs(node: AppNode, edges: Edge[], planned: Set<string>) {
+    const invalidInputs = [];
+    const inputs = TaskRegistry[node.data.type].inputs;
+
+    for (const input of inputs) {
+        const inputValue = node.data.inputs[input.name];
+        const inputValueProvided = inputValue?.length > 0;
+        if (inputValueProvided) {
+            continue;
+        }
+
+        const incomingEdges = edges.filter((edge) => edge.target === node.id);
+
+        const inputLinkedByOutput = incomingEdges.find(
+            (edge) => edge.targetHandle === input.name
+        )
+
+        const requireInputProvidedByVisitedOutput = input.required && inputLinkedByOutput && planned.has(inputLinkedByOutput.source);
+        
+        if(requireInputProvidedByVisitedOutput){
+            continue;
+        } else if (!input.required) {
+            if (!inputLinkedByOutput) {
+                continue;
+            }
+            if(inputLinkedByOutput && planned.has(inputLinkedByOutput.source)){
+                continue;
+            }
+        }
+        invalidInputs.push(input.name);
+
+    }
+    return invalidInputs;
 }
