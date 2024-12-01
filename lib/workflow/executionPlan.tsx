@@ -25,7 +25,9 @@ export function FlowExecutionPlan(nodes: AppNode[], edges: Edge[]): FlowExecutio
 
 ];
 
-    for (let phase = 2; phase <= nodes.length || planned.size < nodes.length; phase++) {
+    planned.add(entryPoint.id);
+
+    for (let phase = 2; phase <= nodes.length && planned.size < nodes.length; phase++) {
         const nextPhase: WorkflowExecutionPlanPhase = {phase, nodes: []};
         for (const currentNode of nodes) {
             if (planned.has(currentNode.id)) continue;
@@ -43,8 +45,12 @@ export function FlowExecutionPlan(nodes: AppNode[], edges: Edge[]): FlowExecutio
             }
 
             nextPhase.nodes.push(currentNode);
-            planned.add(currentNode.id);
+
         }
+        for (const node of nextPhase.nodes) {
+            planned.add(node.id);
+        }
+        executionPlan.push(nextPhase);
     }
 
     return { executionPlan }

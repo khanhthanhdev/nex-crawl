@@ -1,3 +1,5 @@
+import { FlowExecutionPlan } from "@/lib/workflow/executionPlan";
+import { AppNode } from "@/types/appNode";
 import { useReactFlow } from "@xyflow/react"
 import { useCallback } from "react";
 
@@ -6,8 +8,8 @@ const useExecutionPlan = () => {
 
     const generateExecutionPlan = useCallback(() => {
         const {nodes, edges} = toObject();
-        const result = FlowExecutionPlan(nodes, edges);
-
+        const {executionPlan} = FlowExecutionPlan(nodes as AppNode[], edges);
+        return executionPlan
     }, [toObject])
     return generateExecutionPlan
 }
