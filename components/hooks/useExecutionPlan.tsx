@@ -1,4 +1,4 @@
-import { FlowExecutionPlan, FlowToExecutionPlanValidationError } from "@/lib/workflow/executionPlan";
+import { FlowToExecutionPlan, FlowToExecutionPlanValidationError } from "@/lib/workflow/executionPlan";
 import { AppNode } from "@/types/appNode";
 import { useReactFlow } from "@xyflow/react"
 import { useCallback } from "react";
@@ -27,7 +27,7 @@ const useExecutionPlan = () => {
 
     const generateExecutionPlan = useCallback(() => {
         const {nodes, edges} = toObject();
-        const {executionPlan,error} = FlowExecutionPlan(nodes as AppNode[], edges);
+        const {executionPlan,error} = FlowToExecutionPlan(nodes as AppNode[], edges);
 
 
         if(error){
