@@ -6,10 +6,11 @@ import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowE
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { DatesToDurationString } from "@/lib/helper/dates"
 import { WorkflowExecutionStatus } from "@/types/workflow"
 import { useQuery } from "@tanstack/react-query"
 import { formatDistanceToNow } from "date-fns"
-import {CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, LucideIcon, WorkflowIcon } from "lucide-react"
+import {CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, Loader2Icon, LucideIcon, WorkflowIcon } from "lucide-react"
 import { ReactNode } from "react"
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>
@@ -24,6 +25,12 @@ export default function ExecutionViewer(
         queryFn: () => GetWorkflowExecutionWithPhases(initialData!.id),
         refetchInterval: (q) => q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false
     })
+
+    const duration = DatesToDurationString(
+        query.data?.completedAt,
+        query.data?.startedAt
+    )
+
     return <div className="flex w-full h-full">
         <aside className="w-[440px] min-w-[440px] max-w-[440px] border-r-2 border-separate flex flex-grow flex-col overflow-hidden">
             <div className="py-4 px-2">
@@ -37,7 +44,7 @@ export default function ExecutionViewer(
                 <ExecutionLabel 
                     icon={ClockIcon}
                     label="Duration"
-                    value={"TODO"}
+                    value={duration ? duration: <Loader2Icon className="animate-spin" size={20} />}
                 />
                 <ExecutionLabel 
                     icon={CoinsIcon}
