@@ -3,6 +3,7 @@ import Topbar from "@/app/workflow/_components/topbar/Topbar";
 
 import { Loader2Icon } from "lucide-react";
 import { Suspense } from "react";
+import ExecutionViewer from "./ExecutionViewer";
 
 export default function ExecutionViewerPage({ 
     params 
@@ -36,7 +37,7 @@ async function ExecutionViewerWrapper(
 
     const workflowExecution = await GetWorkflowExecutionWithPhases(executionId);
     if (!workflowExecution) {
-        throw new Error("Workflow execution not found");
+        return <div> Not found</div>
     }
-    return <pre>{JSON.stringify(workflowExecution, null, 4)}</pre>
+    return <ExecutionViewer initialData={workflowExecution} />
 }
