@@ -6,6 +6,7 @@ import { ExecutionPhase } from "@prisma/client";
 import { AppNode } from "@/types/appNode";
 import { TaskRegistry } from "./task/registry";
 import { TaskType } from "@/types/task";
+import { ExecutorRegistry } from "./executor/registry";
 
 export async function ExecuteWorkflow(executionId: string) {
     const execution = await prisma.workflowExecution.findUnique({
@@ -131,10 +132,10 @@ async function executeWorkflowPhase(phase: ExecutionPhase) {
         }
     });
 
-    const creditsRequired = TaskRegistry[node.data.type];
+    const creditsRequired = TaskRegistry[node.data.type].credits;
     console.log(`Credits required for ${phase.name} is ${creditsRequired}`)
 
-    const success = executePhase(phase, node)
+    const success = await executePhase(phase, node)
 
     await finalizePhase(phase.id, success);
     return {success}
