@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { DatesToDurationString } from "@/lib/helper/dates"
+import { GetPhasesTotalCost } from "@/lib/helper/phases"
 import { WorkflowExecutionStatus } from "@/types/workflow"
 import { useQuery } from "@tanstack/react-query"
 import { formatDistanceToNow } from "date-fns"
@@ -31,6 +32,8 @@ export default function ExecutionViewer(
         query.data?.startedAt
     )
 
+    const creditsConsumed = GetPhasesTotalCost(query.data?.phases || [])
+
     return <div className="flex w-full h-full">
         <aside className="w-[440px] min-w-[440px] max-w-[440px] border-r-2 border-separate flex flex-grow flex-col overflow-hidden">
             <div className="py-4 px-2">
@@ -49,7 +52,7 @@ export default function ExecutionViewer(
                 <ExecutionLabel 
                     icon={CoinsIcon}
                     label="Credits consumed"
-                    value={"TODO"}
+                    value={creditsConsumed}
                 />
             </div>
             <Separator/>
@@ -71,7 +74,9 @@ export default function ExecutionViewer(
                                 {phase.name}
                             </p>
                         </div>
-                        
+                        <p className="text-xs text-muted-foreground">
+                            {phase.status}
+                        </p>
                     </Button>
                 ))}
             </div>
