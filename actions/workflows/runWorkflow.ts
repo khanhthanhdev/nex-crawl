@@ -7,7 +7,7 @@ import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { ExecutionPhaseStatus, WorkflowExecutionPlan, WorkflowExecutionStatus, workflowExecutionTrigger } from "@/types/workflow";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { number } from "zod";
+
 
 export async function RunWorkflow(form: {
     workflowId: string;
@@ -60,6 +60,7 @@ export async function RunWorkflow(form: {
             status: WorkflowExecutionStatus.PENDING,
             startedAt: new Date(),
             trigger: workflowExecutionTrigger.MANUAL,
+            definition: flowDefinition,
             phases: {
                 create: executionPlan.flatMap(phase => {
                     return phase.nodes.flatMap((node) => {

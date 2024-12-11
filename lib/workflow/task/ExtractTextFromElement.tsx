@@ -10,7 +10,7 @@ export const ExtractTextFromElement = {
     credits: 2,
     inputs: [
         {
-            name: "HTML",
+            name: "Html",
             type: TaskParamType.STRING,
             required: true,
             variant: "textarea",
