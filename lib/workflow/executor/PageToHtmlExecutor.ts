@@ -8,8 +8,8 @@ export async function PageToHtmlExecutor(
     environtment: ExecutionEnvironment <typeof PageToHtmlTask>   ,
 ): Promise<boolean> {
     try {
-        const websiteUrl = environtment.getInput("Web page");
-        console.log("URL", websiteUrl);
+        const html = await environtment.getPage()!.content();
+        environtment.setOutput("Html", html);
         return true;
     } catch (error) {
         console.log(error)

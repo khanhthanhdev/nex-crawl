@@ -9,13 +9,14 @@ export async function LaunchBrowserExecutor(
 ): Promise<boolean> {
     try {
         const websiteUrl = environtment.getInput("Website URL");
-        console.log("URL", websiteUrl);
+
         const browser = await puppeteer.launch({
             headless: false,
         });
-
-        await waitFor(3000);
-        await browser.close();
+        environtment.setBrowser(browser);
+        const page = await browser.newPage();
+        await page.goto(websiteUrl);
+        environtment.setPage(page);
         return true;
     } catch (error) {
         console.log(error)
