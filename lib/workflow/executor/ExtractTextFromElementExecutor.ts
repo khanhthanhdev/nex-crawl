@@ -11,7 +11,7 @@ export async function ExtractTextFromHtmlExecutor(
     try {
         const selector = environtment.getInput("Selector");
         if (!selector) {
-            console.error("Selector not defined");
+            environtment.log.error("Selector not defined");
             return false;
         }
         const html = environtment.getInput("Html");
