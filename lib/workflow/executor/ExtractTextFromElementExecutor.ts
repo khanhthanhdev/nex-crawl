@@ -17,7 +17,7 @@ export async function ExtractTextFromHtmlExecutor(
         const html = environtment.getInput("Html");
         
         if(!html) {
-            console.error("Html not defined");
+            environtment.log.error("Html not defined");
             return false;
         }
 
@@ -25,21 +25,21 @@ export async function ExtractTextFromHtmlExecutor(
         const element = $(selector);
 
         if (!element) {
-            console.log("Element not found");
+            environtment.log.error("Element not found");
             return false;
         }
 
         const extractedText = $.text(element);
         if (!extractedText) {
-            console.log("Extracted text is empty");
+            environtment.log.error("Extracted text is empty");
             return false;
         }
 
         environtment.setOutput("Extracted text", extractedText);
 
         return true;
-    } catch (error) {
-        console.log(error)
+    } catch (error :any) {
+        environtment.log.error(error.message);
         return false;
     }
 }

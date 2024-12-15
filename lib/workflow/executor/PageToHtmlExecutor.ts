@@ -11,8 +11,8 @@ export async function PageToHtmlExecutor(
         const html = await environtment.getPage()!.content();
         environtment.setOutput("Html", html);
         return true;
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        environtment.log.error(error.message);
         return false;
     }
 }

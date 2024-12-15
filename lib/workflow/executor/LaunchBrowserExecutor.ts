@@ -18,8 +18,8 @@ export async function LaunchBrowserExecutor(
         await page.goto(websiteUrl);
         environtment.setPage(page);
         return true;
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        environtment.log.error(error.message)
         return false;
     }
 }
