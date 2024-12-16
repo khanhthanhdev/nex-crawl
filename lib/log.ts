@@ -1,7 +1,7 @@
-import {Log, LogCollector, LogFunction, LogLevel, LogLevels } from "@/types/log";
+import { Log, LogCollector, LogFunction, LogLevel, LogLevels } from "@/types/log";
 
 
-export function createLogCollector():LogCollector {
+export function createLogCollector(): LogCollector {
 
     const logs: Log[] = [];
     const getAll = () => logs;
@@ -10,14 +10,14 @@ export function createLogCollector():LogCollector {
     LogLevels.forEach(level => logFunctions[level] = (message: string) => {
         logs.push(
             {
-                level,
                 message,
+                level,
                 timestamp: new Date()
             }
         )
     })
 
-    return {    
+    return {
         getAll,
         ...logFunctions
 

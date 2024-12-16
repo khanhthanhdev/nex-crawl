@@ -36,12 +36,9 @@ export async function ExecuteWorkflow(executionId: string) {
     await initalizePhaseStatuses(execution)
     // setup execution environment
 
-    
-
     let creditsConsumed = 0;
     let executionFailed = false;
     for (const phase of execution.phases) {
-        const logCollector = createLogCollector();
         const phaseExecution = await executeWorkflowPhase(phase, environment, edges)
         if (!phaseExecution.success) {
             executionFailed = true;
@@ -163,11 +160,11 @@ async function finalizePhase(phaseId: string, success: boolean, outputs: any, lo
             status: finalStatus,
             completedAt: new Date(),
             outputs: JSON.stringify(outputs),
-            logs: {
+            log: {
                 createMany: {
                     data: logCollector.getAll().map(log => ({
                         message: log.message,
-                        level: log.level,
+                        logLevel: log.level,
                         timestamp: log.timestamp
                     }))
                 }
