@@ -12,7 +12,7 @@ import { GetPhasesTotalCost } from "@/lib/helper/phases"
 import { WorkflowExecutionStatus } from "@/types/workflow"
 import { useQuery } from "@tanstack/react-query"
 import { formatDistanceToNow } from "date-fns"
-import {CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, Loader2Icon, LucideIcon, WorkflowIcon } from "lucide-react"
+import { CalendarIcon, CircleDashedIcon, ClockIcon, Coins, CoinsIcon, Loader2Icon, LucideIcon, WorkflowIcon } from "lucide-react"
 import { ReactNode, useState } from "react"
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>
@@ -33,7 +33,7 @@ export default function ExecutionViewer(
 
     const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
 
-    const phaseDetails  = useQuery({
+    const phaseDetails = useQuery({
         queryKey: ["phaseDetails", selectedPhase],
         enabled: selectedPhase !== null,
         queryFn: () => GetWorkflowPhaseDetails(selectedPhase!)
@@ -56,18 +56,18 @@ export default function ExecutionViewer(
                     }) : "-"}</span>
                 } />
 
-                <ExecutionLabel 
+                <ExecutionLabel
                     icon={ClockIcon}
                     label="Duration"
-                    value={duration ? duration: <Loader2Icon className="animate-spin" size={20} />}
+                    value={duration ? duration : <Loader2Icon className="animate-spin" size={20} />}
                 />
-                <ExecutionLabel 
+                <ExecutionLabel
                     icon={CoinsIcon}
                     label="Credits consumed"
                     value={creditsConsumed}
                 />
             </div>
-            <Separator/>
+            <Separator />
             <div className="flex justify-center items-center py-2 px-4">
                 <div className="text-muted-foreground flex items-center gap-2">
                     <WorkflowIcon size={20} className="stroke-muted-foreground/80" />
@@ -78,12 +78,12 @@ export default function ExecutionViewer(
             <div className="overflow-auto h-full px-2 py-4">
                 {query.data?.phases.map((phase, index) => (
                     <Button key={phase.id} className="w-full justify-between" variant={selectedPhase === phase.id ? "secondary" : "ghost"}
-                    onClick={() => {
-                        if (isRunning) return;
-                        setSelectedPhase(phase.id)
-                        
-                        
-                    }}
+                        onClick={() => {
+                            if (isRunning) return;
+                            setSelectedPhase(phase.id)
+
+
+                        }}
                     >
                         <div className="flex items-center gap-2">
                             <Badge variant={"outline"} >
@@ -101,7 +101,46 @@ export default function ExecutionViewer(
             </div>
         </aside>
         <div className="flex w-full h-full">
-                <pre>{JSON.stringify(phaseDetails.data, null, 4)}</pre>
+            {isRunning && (
+                <div className="flex items-center flex-col gap-2 justify-center h-full w-full">
+                    <p className="font-bold">Run is in progress, please wait</p>
+                </div>
+            )}
+            {!isRunning && !selectedPhase && (
+                <div className="flex items-center flex-col gap-2 justify-center h-full w-full">
+                    <div className="flex flex-col gap-1 text-center">
+                        <p className="font-bold">No phase selected</p>
+                        <p className="text-sm text-muted-foreground">
+                            Select a phase to view details
+                        </p>
+                    </div>
+                </div>
+            )}
+            {!isRunning && selectedPhase && phaseDetails.data && (
+                <div className="flex flex-col py-4 container gap-4 overflow-auto">
+                    <div className="flex gap-2 items-center">
+                        <Badge variant={'outline'} className="space-x-4">
+                            <div className="flex gap-1 items-center">
+                                <CoinsIcon size={18} className="stroke-muted-foreground" />
+                                <span>Credits</span>
+                            </div>
+
+                            <span>TODO</span>
+                        </Badge>
+                        <Badge variant={'outline'} className="space-x-4">
+                            <div className="flex gap-1 items-center">
+                                <ClockIcon size={18} className="stroke-muted-foreground" />
+                                <span>Duration</span>
+                            </div>
+
+                            <span>{DatesToDurationString(
+                                phaseDetails.data.completedAt,
+                                phaseDetails.data.startedAt
+                            ) || "-"}</span>
+                        </Badge>
+                    </div>
+                </div>
+            )}
         </div>
     </div>
 }
