@@ -90,6 +90,7 @@ export function MobileSidebar() {
                     side={"left"}
                 >
                         <Logo />
+                        <UserAvaliableCreditsBadge />
                         <div className='flex flex-col gap-1'>
                         {routes.map((route) => (
                             <Link key={route.href} href={route.href}
