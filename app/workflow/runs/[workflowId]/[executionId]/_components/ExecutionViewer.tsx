@@ -19,7 +19,7 @@ import { ExecutionLog } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { formatDistanceToNow } from "date-fns"
 import { CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, Loader2Icon, LucideIcon, WorkflowIcon } from "lucide-react"
-import { ReactNode, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import PhaseStatusBadge from "./PhaseStatusBadge"
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>
@@ -39,6 +39,23 @@ export default function ExecutionViewer(
     })
 
     const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
+
+
+    useEffect(() => {
+        // select the running phase in sidebar
+        const phases = query.data?.phases || [];
+        if (isRunning){
+            const phaseToSelect = phases.toSorted((a,b) => a.startedAt! > b.startedAt! ? -1 : 1)[0];
+
+            setSelectedPhase(phaseToSelect.id)
+            return;
+        }
+        const phaseToSelect = phases.toSorted((a,b) => a.completedAt! > b.completedAt! ? -1 : 1)[0];
+
+        setSelectedPhase(phaseToSelect.id)
+        
+
+    }, [query.data?.phases, isRunning, setSelectedPhase])
 
     const phaseDetails = useQuery({
         queryKey: ["phaseDetails", selectedPhase],
