@@ -14,12 +14,13 @@ import { DatesToDurationString } from "@/lib/helper/dates"
 import { GetPhasesTotalCost } from "@/lib/helper/phases"
 import { cn } from "@/lib/utils"
 import { LogLevel } from "@/types/log"
-import { WorkflowExecutionStatus } from "@/types/workflow"
+import { ExecutionPhaseStatus, WorkflowExecutionStatus } from "@/types/workflow"
 import { ExecutionLog } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { formatDistanceToNow } from "date-fns"
 import { CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, Loader2Icon, LucideIcon, WorkflowIcon } from "lucide-react"
 import { ReactNode, useState } from "react"
+import PhaseStatusBadge from "./PhaseStatusBadge"
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>
 
@@ -99,9 +100,7 @@ export default function ExecutionViewer(
                                 {phase.name}
                             </p>
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                            {phase.status}
-                        </p>
+                        <PhaseStatusBadge status={phase.status as ExecutionPhaseStatus} />
                     </Button>
                 ))}
             </div>
