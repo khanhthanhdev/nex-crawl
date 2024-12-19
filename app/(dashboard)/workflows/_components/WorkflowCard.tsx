@@ -12,6 +12,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import TooltipWrapper from '@/components/TooltipWrapper';
 import DeleteWorkflowDialog from './DeleteWorkflowDialog';
+import RunBtn from './RunBtn';
 
 
 const statusColors = {
@@ -42,6 +43,7 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
                 </div>
             </div>
             <div className='flex items-center space-x-2'>
+                {!isDraft && <RunBtn workflowId = {workflow.id} />}
                 <Link href={`/workflow/editor/${workflow.id}`}
                     className={cn(buttonVariants({
                         variant: 'outline',
