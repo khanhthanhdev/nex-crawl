@@ -1,20 +1,60 @@
 "use client"
 
+import { UpdateWorkflowCron } from '@/actions/workflows/updateWorkflowCron'
 import CustomDialogHeader from '@/components/CustomDialogHeader'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { CalendarIcon, TriangleAlertIcon } from 'lucide-react'
-import React from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { CalendarIcon, ClockIcon, TriangleAlertIcon } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import cronstrue from 'cronstrue';
 
-function SchedulerDialog() {
+
+function SchedulerDialog(props: {workflowId: string, cron: string | null}) {
+
+    const [cron, setCron] = useState(props.cron || "")
+    const [validCron, setValidCron] = useState(false)
+    const [readableCron, setReadableCron] = useState('')
+
+    const mutation = useMutation({
+        mutationFn: UpdateWorkflowCron,
+        onSuccess: () => {
+            toast.success('Workflow scheduled successfully', {id: "cron"})
+        },
+        onError: () => {
+            toast.error('Failed to schedule workflow', {id: "cron"})
+        }
+    });
+
+    useEffect(() => {
+        try {
+            const humanCronStr = cronstrue.toString(cron);
+            setValidCron(true);
+            setReadableCron(humanCronStr);
+        } catch (error) {
+            setValidCron(false)
+        }
+    }, [cron])
+
   return <Dialog>
     <DialogTrigger asChild>
-        <Button variant={"link"} size='sm' className={cn("text-sm p-0 h-auto")}>
-            <div className='flex items-center gap-1'>
+        <Button variant={"link"} size='sm' className={cn("text-sm p-0 h-auto text-orange-500",
+
+            validCron && "text-primary" 
+        )}>
+            {validCron && <div className='flex items-center gap-2'>
+                    <ClockIcon /> {readableCron}
+                </div>}
+
+            {!validCron && (
+                <div className='flex items-center gap-1'>
                 <TriangleAlertIcon className='h-3 w-3' /> Set schedule
             </div>
+            )}
+            
         </Button>
     </DialogTrigger>
     <DialogContent className='px-0'>
@@ -23,14 +63,29 @@ function SchedulerDialog() {
             <p className='text-sm text-muted-foreground'>
                 Schedule this workflow to run at a specific time. You can set the schedule to run once or on a recurring basis.
             </p>
-            <Input placeholder='E.g *****' />
+            <Input 
+                placeholder='E.g *****' 
+                value={cron} 
+                onChange={(e) => setCron(e.target.value)} 
+            />
+
+            <div className={cn("bg-accent rounded-md p-4 border text-sm border-destructive text-destructive", validCron && "border-primary text-primary")}>
+                {validCron ? readableCron : "Not a valid cron expression"}
+            </div>
         </div>
         <DialogFooter className='px-6 gap-3'>
             <DialogClose asChild>
                 <Button variant='secondary' className='w-full'>Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-                <Button  className='w-full'>Save</Button>
+                <Button  className='w-full'
+                disabled={mutation.isPending}
+                
+                    onClick={() => {
+                        toast.loading('Scheduling workflow...', {id: "cron"})
+                        mutation.mutate({id:props.workflowId, cron})
+                    }}
+                >Save</Button>
             </DialogClose>
         </DialogFooter>
     </DialogContent>
