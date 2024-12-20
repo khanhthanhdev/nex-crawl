@@ -37,19 +37,23 @@ function SchedulerDialog(props: {workflowId: string, cron: string | null}) {
         } catch (error) {
             setValidCron(false)
         }
-    }, [cron])
+    }, [cron]);
+
+    const workflowHasValidCron = props.cron && props.cron.length > 0;
+
+    const readableSavedIcon = workflowHasValidCron && cronstrue.toString(props.cron!);
 
   return <Dialog>
     <DialogTrigger asChild>
         <Button variant={"link"} size='sm' className={cn("text-sm p-0 h-auto text-orange-500",
 
-            validCron && "text-primary" 
+            workflowHasValidCron && "text-primary" 
         )}>
-            {validCron && <div className='flex items-center gap-2'>
-                    <ClockIcon /> {readableCron}
+            {workflowHasValidCron && <div className='flex items-center gap-2'>
+                    <ClockIcon /> {readableSavedIcon}
                 </div>}
 
-            {!validCron && (
+            {!workflowHasValidCron && (
                 <div className='flex items-center gap-1'>
                 <TriangleAlertIcon className='h-3 w-3' /> Set schedule
             </div>
