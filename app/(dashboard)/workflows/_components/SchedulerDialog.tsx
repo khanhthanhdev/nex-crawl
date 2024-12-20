@@ -11,7 +11,7 @@ import { CalendarIcon, ClockIcon, TriangleAlertIcon } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import cronstrue from 'cronstrue';
-
+import parser from "cron-parser"
 
 function SchedulerDialog(props: {workflowId: string, cron: string | null}) {
 
@@ -31,6 +31,7 @@ function SchedulerDialog(props: {workflowId: string, cron: string | null}) {
 
     useEffect(() => {
         try {
+            parser.parseExpression(cron);
             const humanCronStr = cronstrue.toString(cron);
             setValidCron(true);
             setReadableCron(humanCronStr);
@@ -83,7 +84,7 @@ function SchedulerDialog(props: {workflowId: string, cron: string | null}) {
             </DialogClose>
             <DialogClose asChild>
                 <Button  className='w-full'
-                disabled={mutation.isPending}
+                disabled={mutation.isPending || !validCron}
                 
                     onClick={() => {
                         toast.loading('Scheduling workflow...', {id: "cron"})
