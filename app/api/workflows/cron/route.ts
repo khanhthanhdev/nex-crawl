@@ -1,3 +1,4 @@
+import { getAppUrl } from "@/lib/helper/appUrl";
 import prisma from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow";
 
@@ -17,8 +18,19 @@ export async function GET(req: Request){
     for (const workflow of workflows) {
         triggerWorkflow(workflow.id);
     }
+
+    return new Response(null, { status: 200 });
 }
 
 function triggerWorkflow(workflowId: string) {
-    console.log("trigger",workflowId);
+    const triggerApiUrl = getAppUrl(`api/workflows/execute?workflowId=${workflowId}`)
+
+    fetch(triggerApiUrl, {
+        headers: {
+            Authorization: `Bearer ${process.env.API_SECRET!}`,
+        },
+        cache: "no-cache",
+        signal: AbortSignal.timeout(5000),
+
+    }).catch(error => console.error("Error triggering workflow with id", error.message));
 }
