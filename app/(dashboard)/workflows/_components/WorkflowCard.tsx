@@ -136,6 +136,10 @@ export default WorkflowCard;
 
 function LastRunDetails({ workflow }: { workflow: Workflow }) {
 
+    const isDraft = workflow.status === WorkflowStatus.DRAFT;
+
+    if (isDraft) return null;
+
     const { lastRunAt, lastRunStatus, lastRunId, nextRunAt } = workflow;
     const formattedStartedAt = lastRunAt && formatDistanceToNow(lastRunAt, { addSuffix: true });
 
