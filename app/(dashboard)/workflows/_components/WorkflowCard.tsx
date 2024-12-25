@@ -15,7 +15,7 @@ import DeleteWorkflowDialog from './DeleteWorkflowDialog';
 import RunBtn from './RunBtn';
 import SchedulerDialog from './SchedulerDialog';
 import { Badge } from '@/components/ui/badge';
-import ExecutionStatusIndicator from '@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator';
+import { ExecutionStatusIndicator, ExecutionStatusLabel, } from '@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import {formatInTimeZone} from 'date-fns-tz';
@@ -156,7 +156,7 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
             >
                 <span>Last run:</span>
                 <ExecutionStatusIndicator status={lastRunStatus as WorkflowExecutionStatus} />
-                <span>{lastRunStatus}</span>
+                <ExecutionStatusLabel status={lastRunStatus as WorkflowExecutionStatus} />
                 <span>{formattedStartedAt}</span>
                 <ChevronRightIcon size={14} className='group-hover:translate-x-0 transition -translate-x-[2px]' />
             </Link>
