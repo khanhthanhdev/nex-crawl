@@ -4,7 +4,7 @@ import CustomDialogHeader from '@/components/CustomDialogHeader';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import {duplicateWorkflowSchemaType, duplicateWorkflowSchema } from '@/schema/workflow';
-import { Layers2Icon, Loader2 } from 'lucide-react';
+import { CopyIcon, Layers2Icon, Loader2 } from 'lucide-react';
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form';
 
@@ -16,6 +16,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { toast } from 'sonner';
 import { DuplicateWorkflow } from '@/actions/workflows/duplicateWorkflow';
+import { cn } from '@/lib/utils';
 
 
 function DuplicateWorkflowDialog({ workflowId }: { workflowId?: string }) {
@@ -52,8 +53,10 @@ function DuplicateWorkflowDialog({ workflowId }: { workflowId?: string }) {
     }}>
 
         <DialogTrigger asChild>
-            <Button>
-                // 
+            <Button variant={"ghost"} size={"icon"}
+                className={cn("transition-opacity duration-200 opacity-0 group-hover/card:opacity-100")}
+            >
+                <CopyIcon className='w-4 h-4 text-muted-foreground cursor-pointer' />
             </Button>
         </DialogTrigger>
         <DialogContent className='px-0'>

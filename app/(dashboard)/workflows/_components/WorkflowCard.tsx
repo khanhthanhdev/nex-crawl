@@ -19,6 +19,8 @@ import { ExecutionStatusIndicator, ExecutionStatusLabel, } from '@/app/workflow/
 import { format, formatDistanceToNow } from 'date-fns';
 
 import {formatInTimeZone} from 'date-fns-tz';
+import { DuplicateWorkflow } from '@/actions/workflows/duplicateWorkflow';
+import DuplicateWorkflowDialog from './DuplicateWorkflowDialog';
 
 
 const statusColors = {
@@ -30,7 +32,7 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
 
     const isDraft = workflow.status === WorkflowStatus.DRAFT;
 
-    return <Card className='border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md dark:shadow-primary/30'>
+    return <Card className='border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md dark:shadow-primary/30 group/card'>
         <CardContent className='p-4 flex items-center justify-between h-[100px]'>
             <div className='flex items-center justify-end space-x-3'>
                 <div className={cn("w-10 h-10 rounded-full flex items-center  justify-center", statusColors[workflow.status as WorkflowStatus])}>
@@ -44,8 +46,11 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
                             {workflow.name}
                         </Link>
                         {isDraft && <span className='px-2 ml-2 bg-yellow-200 font-medium py-0.5 rounded-full'>Draft</span>}
+                        <DuplicateWorkflowDialog workflowId={workflow.id} />
                     </h3>
-                    <ScheduleSection isDraft={isDraft} creditsCost={workflow.creditsCost}
+                    <ScheduleSection 
+                    isDraft={isDraft} 
+                    creditsCost={workflow.creditsCost}
                         workflowId={workflow.id}
                         cron={workflow.cron}
                     />
