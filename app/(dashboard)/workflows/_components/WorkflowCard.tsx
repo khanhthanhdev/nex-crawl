@@ -40,11 +40,14 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
                 </div>
                 <div>
                     <h3 className='text-base font-bold text-muted-foreground flex items-center'>
-                        <Link href={`/workflow/editor/${workflow.id}`}
-                            className='flex items-center hover:underline'
-                        >
-                            {workflow.name}
-                        </Link>
+                        <TooltipWrapper content={workflow.description}>
+                            <Link href={`/workflow/editor/${workflow.id}`}
+                                className='flex items-center hover:underline'
+                            >
+                                {workflow.name}
+                            </Link>
+                        </TooltipWrapper>
+                        
                         {isDraft && <span className='px-2 ml-2 bg-yellow-200 font-medium py-0.5 rounded-full'>Draft</span>}
                         <DuplicateWorkflowDialog workflowId={workflow.id} />
                     </h3>
