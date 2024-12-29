@@ -2,10 +2,10 @@
 
 import { ExecutionEnvironment } from '@/types/executor';
 
-import { FillInputTask } from '../task/FillInput';
+import { ClickElementTask } from '../task/ClickElement';
 
-export async function FillInputExecutor(
-    environtment: ExecutionEnvironment <typeof FillInputTask>   ,
+export async function ClickElementExecutor(
+    environtment: ExecutionEnvironment <typeof ClickElementTask>   ,
 ): Promise<boolean> {
     try {
         const selector = environtment.getInput("Selector");
@@ -13,14 +13,7 @@ export async function FillInputExecutor(
             environtment.log.error("Selector is required");
             return false;
         }
-
-        const value = environtment.getInput("Value");
-        if (!value) {
-            environtment.log.error("Value is required");
-            return false;
-        }
-
-        await environtment.getPage()!.type(selector, value);
+        await environtment.getPage()!.click(selector);
         return true;
     } catch (error: any) {
         environtment.log.error(error.message);
