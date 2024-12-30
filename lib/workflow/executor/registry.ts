@@ -19,4 +19,5 @@ export const ExecutorRegistry: RegistryType = {
     EXTRACT_TEXT_FROM_ELEMENT: ExtractTextFromHtmlExecutor,
     FILL_INPUT: FillInputExecutor,
     CLICK_ELEMENT: ClickElementExecutor,
+   
 }
