@@ -196,8 +196,6 @@ async function executePhase(
     logCollector: LogCollector
 ): Promise<boolean> {
     
-    await waitFor(1500)
-
     const runFn = ExecutorRegistry[node.data.type];
     if (!runFn) {
         logCollector.error("Executor not found for task type: " + node.data.type);
