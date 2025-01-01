@@ -59,8 +59,6 @@ export async function GetStatsCardsValues(period: Period) {
         0
     );
 
-
-
     return stats;
 
 }

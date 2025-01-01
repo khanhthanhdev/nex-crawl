@@ -5,6 +5,8 @@ import { Period } from '@/types/analytics';
 import { waitFor } from '@/lib/helper/waitFor';
 import { Skeleton } from '@/components/ui/skeleton';
 import { GetStatsCardsValues } from '@/actions/analytics/getStatsCardsValues';
+import { CirclePlayIcon, CoinsIcon, WaypointsIcon } from 'lucide-react';
+import StatsCard from './_components/StatsCard';
 
 const Home = ({ searchParams }: {
   searchParams: { month?: string, year?: string }
@@ -26,7 +28,16 @@ const Home = ({ searchParams }: {
           <PeriodSelectorWrapper selectedPeriod={period} />
         </Suspense>
       </div>
-      <StatsCard selectedPeriod={period} />
+      <div className='h-full py-6 flex flex-col gap-4'>
+        <Suspense fallback={<StatsCardSkeleton />} >
+          <StatsCards selectedPeriod={period} />
+        </Suspense>
+        <Suspense fallback={<Skeleton className='w-full h-[300px]' />} >
+          
+        </Suspense>
+        
+      </div>
+      
     </div>
 
   )
@@ -39,10 +50,29 @@ async function PeriodSelectorWrapper({ selectedPeriod }: { selectedPeriod: Perio
 }
 
 
-async function StatsCard({selectedPeriod}: {selectedPeriod: Period}) {
+async function StatsCards({selectedPeriod}: {selectedPeriod: Period}) {
+
   const data = await GetStatsCardsValues(selectedPeriod);
 
-  return <pre>{JSON.stringify(data, null, 4)}</pre>
+  return <div className='grid gap-3 lg:gap-8 lg:grid-cols-3 min-h-[120px]'>
+    <StatsCard title="Workflow executions" value={data.workflowExecutions} icon={CirclePlayIcon} />
+    <StatsCard title="Phase executions" value={data.phasesExecutions} icon={WaypointsIcon} />
+    <StatsCard title="Credits consumed" value={data.creditsConsumed} icon={CoinsIcon} />
+  </div>
+}
+
+function StatsCardSkeleton() {
+    return <div className="grid gap-3 lg:gap-8 lg:grid:cols-3">
+      {
+        [1,2,3].map((i) => (
+          <Skeleton key={i} className='w-full min-h-[120px]' />
+        ))
+      }
+    </div>
+}
+
+async function StatsExecutionStatus({selectedPeriod}: {selectedPeriod: Period}) {
+
 }
 
 export default Home
