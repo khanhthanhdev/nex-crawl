@@ -49,15 +49,15 @@ export async function ExtractDataWithAIExecutor(
 
         const openai = new OpenAI({
             apiKey: plainCredentialValue,
-            baseURL: "https://api.groq.com/openai/v1"
+            baseURL: "https://api.together.xyz/v1"
         })
 
         const response = await openai.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
+            model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
             messages: [
                 {
                     role: "system",
-                    content: "You are a web scraper that extracts data from HTML or text inputs. You will receive input content and a prompt specifying the data required. Only return the extracted data as JSON, formatted as an array or object. Avoid additional explanations or text, ensuring that all outputs are valid JSON. If the specified data is not present, return an empty JSON array. Focus on precise data extraction and adhere strictly to the instructions.",
+                    content: "You are a webscraper helper that extracts data from HTML or text. You will be given a piece of text or HTML content as input and also the prompt with the data you want to extract. The response should always be only the extracted data as a JSON array or object, without any additional words or explanations. Analyze the input carefully and extract data precisely based on the prompt. If no data is found, return an empty JSON array. Work only with the provided content and ensure the output is always a valid JSON array without any surrounding text",
                 },
                 {
                     role: "user",
