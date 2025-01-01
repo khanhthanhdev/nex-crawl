@@ -4,6 +4,7 @@ import PeriodSelector from './_components/PeriodSelector';
 import { Period } from '@/types/analytics';
 import { waitFor } from '@/lib/helper/waitFor';
 import { Skeleton } from '@/components/ui/skeleton';
+import { GetStatsCardsValues } from '@/actions/analytics/getStatsCardsValues';
 
 const Home = ({ searchParams }: {
   searchParams: { month?: string, year?: string }
@@ -25,7 +26,7 @@ const Home = ({ searchParams }: {
           <PeriodSelectorWrapper selectedPeriod={period} />
         </Suspense>
       </div>
-      Stats
+      <StatsCard selectedPeriod={period} />
     </div>
 
   )
@@ -35,6 +36,13 @@ async function PeriodSelectorWrapper({ selectedPeriod }: { selectedPeriod: Perio
 
   const periods = await GetPeriods();
   return <PeriodSelector selectedPeriod={selectedPeriod} periods={periods} />
+}
+
+
+async function StatsCard({selectedPeriod}: {selectedPeriod: Period}) {
+  const data = await GetStatsCardsValues(selectedPeriod);
+
+  return <pre>{JSON.stringify(data, null, 4)}</pre>
 }
 
 export default Home
