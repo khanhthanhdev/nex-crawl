@@ -2,7 +2,7 @@
 
 import { GetWorkflowExecutionStats } from '@/actions/analytics/getWorkflowExecutionStats';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartLegend } from '@/components/ui/chart';
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import {  Layers2 } from 'lucide-react';
 import React from 'react'
 import {AreaChart, Area, CartesianGrid, XAxis } from 'recharts';
@@ -45,9 +45,24 @@ function ExecutionStatusChart({data}:{data: ChartData}) {
                         return date.toLocaleDateString("en-US", {month: "short", day: "numeric"});
                     }}
                 />
-                <ChartLegend />
-                <Area dataKey={"success"} />
-                <Area dataKey={"failed"} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <ChartTooltip content={<ChartTooltipContent className='w-[250px]' />} />
+                <Area min={0} 
+                type={"bump"} 
+                dataKey={"success"} 
+                fill='var(--color-success)'
+                fillOpacity={0.6}
+                stroke='var(--color-success)'
+                stackId={"a"}
+                />
+                <Area min={0} 
+                type={"bump"} 
+                dataKey={"failed"} 
+                // fill='var(--color-failed)'
+                fillOpacity={0.6}
+                stroke='var(--color-failed)'
+                stackId={"a"}
+                />
             </AreaChart>
         </ChartContainer>
     </CardContent>
