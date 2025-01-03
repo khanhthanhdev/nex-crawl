@@ -11,7 +11,7 @@ const indicatorColors: Record<WorkflowExecutionStatus, string> = {
 }
 
 
-export function ExecutionStatusIndicator({status}: {status: WorkflowExecutionStatus}) {
+export default function ExecutionStatusIndicator({status}: {status: WorkflowExecutionStatus}) {
   return (
     <div className={cn("w-2 h-2 rounded-full", indicatorColors[status])} />
   )

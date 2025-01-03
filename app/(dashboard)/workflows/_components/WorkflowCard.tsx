@@ -15,12 +15,13 @@ import DeleteWorkflowDialog from './DeleteWorkflowDialog';
 import RunBtn from './RunBtn';
 import SchedulerDialog from './SchedulerDialog';
 import { Badge } from '@/components/ui/badge';
-import { ExecutionStatusIndicator, ExecutionStatusLabel, } from '@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator';
+
 import { format, formatDistanceToNow } from 'date-fns';
 
 import {formatInTimeZone} from 'date-fns-tz';
-import { DuplicateWorkflow } from '@/actions/workflows/duplicateWorkflow';
+
 import DuplicateWorkflowDialog from './DuplicateWorkflowDialog';
+import ExecutionStatusIndicator, { ExecutionStatusLabel } from '@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator';
 
 
 const statusColors = {
