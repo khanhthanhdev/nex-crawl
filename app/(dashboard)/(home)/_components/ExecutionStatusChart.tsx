@@ -1,3 +1,4 @@
+
 "use client";
 
 import { GetWorkflowExecutionStats } from '@/actions/analytics/getWorkflowExecutionStats';
@@ -20,7 +21,7 @@ const chartConfig = {
     }
 }
 
-function ExecutionStatusChart({data}:{data: ChartData}) {
+function CreditUsageChart({data}:{data: ChartData}) {
   return <Card>
     <CardHeader>
         <CardTitle className='text-2xl font-bold flex items-center gap-2'>
@@ -60,7 +61,7 @@ function ExecutionStatusChart({data}:{data: ChartData}) {
                 dataKey={"failed"} 
                 // fill='var(--color-failed)'
                 fillOpacity={0.6}
-                stroke='var(--color-failed)'
+                // stroke='var(--color-failed)'
                 stackId={"a"}
                 />
             </AreaChart>
@@ -69,4 +70,4 @@ function ExecutionStatusChart({data}:{data: ChartData}) {
   </Card>
 }
 
-export default ExecutionStatusChart
+export default CreditUsageChart;

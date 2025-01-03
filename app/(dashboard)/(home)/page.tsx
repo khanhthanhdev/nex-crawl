@@ -9,6 +9,8 @@ import { CirclePlayIcon, CoinsIcon, WaypointsIcon } from 'lucide-react';
 import StatsCard from './_components/StatsCard';
 import { GetWorkflowExecutionStats } from '@/actions/analytics/getWorkflowExecutionStats';
 import ExecutionStatusChart from './_components/ExecutionStatusChart';
+import { GetCreditUsageInPeriod } from '@/actions/analytics/getCreditUsageInPeriod';
+import CreditUsageChart from '../billing/_components/CreditUsageChart';
 
 const Home = ({ searchParams }: {
   searchParams: { month?: string, year?: string }
@@ -37,7 +39,9 @@ const Home = ({ searchParams }: {
         <Suspense fallback={<Skeleton className='w-full h-[300px]' />} >
           <StatsExecutionStatus selectedPeriod={period} />
         </Suspense>
-        
+        <Suspense fallback={<Skeleton className='w-full h-[300px]' />} >
+          <CreditsUsageInPeriod selectedPeriod={period} />
+        </Suspense>
         
       </div>
       
@@ -77,6 +81,18 @@ function StatsCardSkeleton() {
 async function StatsExecutionStatus({selectedPeriod}: {selectedPeriod: Period}) { 
     const data = await GetWorkflowExecutionStats(selectedPeriod);
     return <ExecutionStatusChart data={data} />
+}
+
+
+async function CreditsUsageInPeriod({
+  selectedPeriod
+}: { selectedPeriod: Period }) {
+  const data = await GetCreditUsageInPeriod(selectedPeriod);
+
+  return <CreditUsageChart data={data} title="Daily credits spent" 
+    description="Daily credit consumed in selected period"
+  />
+
 }
 
 export default Home
