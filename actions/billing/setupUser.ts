@@ -1,5 +1,3 @@
-
-
 "use server";
 
 import prisma from "@/lib/prisma";
@@ -23,7 +21,7 @@ export async function SetupUser() {
         await prisma.userBalance.create({
             data: {
                 userId,
-                credits: 100,
+                credits: 999,
             }
 
         })
