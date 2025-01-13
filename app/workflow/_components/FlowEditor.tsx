@@ -86,7 +86,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
         const target = nodes.find((nd) => nd.id === connection.target);
 
         if(!source || !target) {
-            console.log('source or target not found')
+
             return false;
         }
 
@@ -101,7 +101,6 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
             console.error('input type and output type not match')
             return false;
         }
-        console.log('output', {output, input})
         
         const hasCycle = (node: AppNode, visited = new Set()) => {
             if(visited.has(node.id)) return false;
